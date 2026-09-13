@@ -1,22 +1,31 @@
 # Football Data Explorations
 
-A small Python portfolio project for exploring [StatsBomb](https://github.com/statsbomb/open-data) open football event data. The first example loads the **2022 FIFA World Cup Final** (Argentina vs France), plots every shot on a pitch, and draws a completed-pass map for Lionel Messi.
+StatsBomb open-data analysis packaged as an **importable Python module**, with notebooks as demos and a small **FastAPI + Next.js** app on top.
 
-Later iterations will add an expected-goals (xG) chart and a second match. For now this is one working end-to-end script.
+Reusable entry points in `src/football_data/`:
 
-## What the script does
+- `get_shot_map(match)` — two-team shot map (goals as stars)
+- `get_pass_map(match, player)` — completed-pass map
+- `get_xg_shot_map(match)` — shot map sized by StatsBomb xG (shootout excluded)
 
-`scripts/explore_match.py`:
+Showcase matches: **2018** (France vs Croatia) and **2022** (Argentina vs France) World Cup finals.
 
-1. Looks up the World Cup 2022 Final `match_id` with `sb.matches(competition_id=43, season_id=106)`.
-2. Downloads that match’s events into a pandas DataFrame via `statsbombpy`.
-3. Filters **shots** and plots them on an `mplsoccer` pitch, color-coded by team. Goals are drawn as larger gold-edged stars.
-4. Filters **Messi’s completed passes** and plots them as a second pitch map.
-5. Saves both charts as PNGs in `outputs/` and prints shot/goal counts plus Messi’s pass completion percentage.
+## Layout
+
+```
+football-data-explorations/
+├── notebooks/              # thin demos that call the package
+├── src/football_data/      # importable loaders / analysis / viz
+├── app/
+│   ├── api/                # FastAPI — JSON + PNG maps
+│   └── web/                # Next.js pitchboard UI
+├── outputs/
+├── pyproject.toml
+├── requirements.txt
+└── README.md
+```
 
 ## Setup
-
-From the project root (`football-data-explorations/`):
 
 ```powershell
 python -m venv venv
@@ -25,41 +34,41 @@ python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-On macOS/Linux:
+`requirements.txt` editable-installs this repo (`pip install -e .`) and pulls FastAPI + Jupyter.
 
-```bash
-python3 -m venv venv
-source venv/bin/activate
-python -m pip install --upgrade pip
-pip install -r requirements.txt
-```
-
-`statsbombpy` reads StatsBomb’s **free open-data** (no API credentials required). The first run downloads match JSON over the network.
-
-## Run
+## Run the mini-app
 
 ```powershell
-python scripts\explore_match.py
+# API (repo root, venv on)
+uvicorn app.api.main:app --reload --port 8000
+
+# UI (second terminal)
+cd app\web
+npm install
+npm run dev
 ```
 
-Charts land in `outputs/`:
+Open http://localhost:3000 — pick a final, inspect xG / shots / passes.
 
-- `wc2022_final_<match_id>_shots.png`
-- `wc2022_final_<match_id>_messi_passes.png`
+See [app/README.md](app/README.md) for API routes.
 
-## Project layout
+## Notebooks
 
+```powershell
+jupyter notebook notebooks\01_explore_wc_final.ipynb
+jupyter notebook notebooks\02_xg_two_finals.ipynb
 ```
-football-data-explorations/
-├── venv/                 # local virtual environment (not committed)
-├── data/                 # place for cloned/cached StatsBomb files
-├── scripts/
-│   └── explore_match.py
-├── outputs/              # generated charts
-├── requirements.txt
-└── README.md
+
+## From Python
+
+```python
+from pathlib import Path
+from football_data import world_cup_2022_final, get_xg_shot_map
+
+match = world_cup_2022_final()
+get_xg_shot_map(match, save_path=Path("outputs") / f"wc2022_final_{match.match_id}_xg_shots.png")
 ```
 
 ## Data credit
 
-Event data comes from [StatsBomb Open Data](https://github.com/statsbomb/open-data). Please follow their license and attribution guidelines if you publish charts.
+Event data from [StatsBomb Open Data](https://github.com/statsbomb/open-data). Follow their license and attribution if you publish charts.

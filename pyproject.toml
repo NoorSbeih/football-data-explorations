@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "football-data-explorations"
+version = "0.1.0"
+description = "Reusable StatsBomb football event-data loaders, analysis, and pitch maps."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pandas",
+    "matplotlib",
+    "statsbombpy",
+    "mplsoccer",
+]
+
+[project.optional-dependencies]
+notebooks = ["notebook", "ipykernel"]
+api = ["fastapi", "uvicorn[standard]"]
+
+[tool.setuptools.packages.find]
+where = ["src"]

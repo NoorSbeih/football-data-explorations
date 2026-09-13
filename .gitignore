@@ -10,12 +10,24 @@ __pycache__/
 *.egg-info/
 .pytest_cache/
 .mypy_cache/
+build/
+dist/
 
 # StatsBomb / cached data
 data/open-data/
 data/cache/
 .statsbombpy_cache/
 *.parquet
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Node / Next.js
+node_modules/
+app/web/.next/
+app/web/out/
+npm-debug.log*
+.env*.local
 
 # OS / IDE
 .DS_Store

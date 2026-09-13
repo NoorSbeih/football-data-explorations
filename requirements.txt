@@ -1,4 +1,5 @@
-pandas
-matplotlib
-statsbombpy
-mplsoccer
+-e .
+notebook
+ipykernel
+fastapi
+uvicorn[standard]
