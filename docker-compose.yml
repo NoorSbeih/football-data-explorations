@@ -1,0 +1,22 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    ports:
+      - "8000:8000"
+    volumes:
+      # Persist the Parquet cache across container restarts.
+      - ./data/cache:/code/data/cache
+    environment:
+      FOOTBALL_DATA_CACHE_DIR: /code/data/cache
+
+  web:
+    build:
+      context: ./app/web
+      args:
+        NEXT_PUBLIC_API_URL: http://localhost:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api

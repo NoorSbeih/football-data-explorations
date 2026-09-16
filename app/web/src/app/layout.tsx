@@ -19,7 +19,7 @@ const body = IBM_Plex_Sans({
 export const metadata: Metadata = {
   title: "Football Data Explorations",
   description:
-    "World Cup finals on a tactics board — StatsBomb xG maps from FastAPI.",
+    "Five famous finals on a tactics board — StatsBomb xG maps from FastAPI.",
 };
 
 export default function RootLayout({

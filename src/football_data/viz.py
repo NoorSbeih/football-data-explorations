@@ -16,6 +16,12 @@ TEAM_COLORS = {
     "Argentina": "#75AADB",
     "France": "#002654",
     "Croatia": "#C60C30",
+    "Tottenham Hotspur": "#132257",
+    "Liverpool": "#C8102E",
+    "Italy": "#0068A8",
+    "England": "#CE1124",
+    "Spain Women's": "#AA151B",
+    "England Women's": "#0033A0",
 }
 
 _PITCH_COLOR = "#1a472a"
@@ -70,7 +76,10 @@ def plot_shot_map(
         xs, ys = group["x"], group["y"]
         if team == away_team:
             xs, ys = invert_xy(xs, ys)
-        is_goal = group["is_goal"] if "is_goal" in group.columns else group["shot_outcome"].eq("Goal")
+        if "is_goal" in group.columns:
+            is_goal = group["is_goal"]
+        else:
+            is_goal = group["shot_outcome"].eq("Goal")
 
         pitch.scatter(
             xs.loc[~is_goal],

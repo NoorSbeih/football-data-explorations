@@ -13,11 +13,24 @@ dependencies = [
     "matplotlib",
     "statsbombpy",
     "mplsoccer",
+    "pyarrow",
 ]
 
 [project.optional-dependencies]
 notebooks = ["notebook", "ipykernel"]
 api = ["fastapi", "uvicorn[standard]"]
+dev = ["pytest", "pytest-cov", "httpx", "ruff"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests", "app"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]

@@ -39,4 +39,6 @@ npm run dev
 | GET | `/api/matches/{id}/shot-map.png` | Classic shot map |
 | GET | `/api/matches/{id}/pass-map.png?player=Messi` | Completed passes |
 
-The API only exposes curated showcase matches for now (2018 + 2022 World Cup finals).
+The API only exposes curated showcase matches for now — five finals across World Cup,
+Champions League, Euro, and Women's World Cup (see `showcase_matches()` /
+root README's "Showcase matches" table).

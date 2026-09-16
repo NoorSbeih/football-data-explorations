@@ -39,7 +39,11 @@ app.add_middleware(
         "http://localhost:3000",
         "http://127.0.0.1:3000",
     ],
-    allow_credentials=True,
+    # Any Vercel deployment (production + preview URLs) is allowed too — this
+    # API is public/read-only with no auth, so a permissive origin policy for
+    # the UI's own hosting provider is fine.
+    allow_origin_regex=r"https://.*\.vercel\.app",
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )

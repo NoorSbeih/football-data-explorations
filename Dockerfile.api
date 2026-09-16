@@ -1,0 +1,17 @@
+# API image — installs the football_data package + FastAPI, nothing else.
+# Build from the repo root: docker build -f Dockerfile.api -t football-data-api .
+FROM python:3.11-slim
+
+WORKDIR /code
+
+# Install the package first so this layer is cached across code-only changes.
+COPY pyproject.toml README.md ./
+COPY src ./src
+RUN pip install --no-cache-dir .[api]
+
+# Only the API slice of app/ — the Next.js app has its own Dockerfile.
+COPY app/__init__.py ./app/__init__.py
+COPY app/api ./app/api
+
+EXPOSE 8000
+CMD ["uvicorn", "app.api.main:app", "--host", "0.0.0.0", "--port", "8000"]

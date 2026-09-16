@@ -14,6 +14,9 @@ function defaultPlayer(match: Match): string {
   const teams = `${match.home_team} ${match.away_team}`.toLowerCase();
   if (teams.includes("argentina")) return "Messi";
   if (teams.includes("croatia")) return "Modri";
+  if (teams.includes("liverpool")) return "Salah";
+  if (teams.includes("italy")) return "Verratti";
+  if (teams.includes("women's")) return "Bonmati";
   return "Messi";
 }
 
@@ -162,7 +165,7 @@ export default function PitchBoard() {
     <div className="shell">
       <header className="topbar fade-up">
         <div className="brand">Football Data Explorations</div>
-        <p className="brand-note">World Cup finals · StatsBomb open data</p>
+        <p className="brand-note">Five famous finals · StatsBomb open data</p>
       </header>
 
       {error ? (
