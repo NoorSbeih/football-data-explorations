@@ -9,7 +9,10 @@ from a browser, not just a script.
 
 ![Pitch map UI showing the 2018 World Cup final xG shot map](docs/screenshot.png)
 
-**Live demo:** _add the deployed URL here once available — see [`docs/DEPLOY.md`](docs/DEPLOY.md)_
+**Live demo:** [football-data-explorations.vercel.app](https://football-data-explorations.vercel.app) ·
+API: [football-data-explorations.onrender.com](https://football-data-explorations.onrender.com/api/health)
+(deployed on Vercel + Render's free tiers — see [`docs/DEPLOY.md`](docs/DEPLOY.md) for how; the
+API may take ~30s to wake up on the first request after a period of inactivity)
 
 ## What this demonstrates
 
