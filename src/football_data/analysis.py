@@ -187,6 +187,7 @@ def get_pass_map(
     return plot_pass_map(
         completed,
         player=resolved,
-        title=title,
+        title=title
+        or f"{resolved} — completed passes\n{match.home_team} vs {match.away_team}",
         save_path=save_path,
     )

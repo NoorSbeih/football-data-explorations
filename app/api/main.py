@@ -139,11 +139,9 @@ def pass_map_png(
 ) -> Response:
     match = _resolve(match_id)
     try:
-        fig = get_pass_map(
-            match,
-            player,
-            title=f"{player} — completed passes\n{match.home_team} vs {match.away_team}",
-        )
+        # Leave title unset so get_pass_map uses the resolved StatsBomb name
+        # (e.g. "Luka Modrić"), not the short query fragment from the client.
+        fig = get_pass_map(match, player)
     except ValueError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
     with _png_bytes(fig) as payload:

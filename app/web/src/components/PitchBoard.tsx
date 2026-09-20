@@ -10,14 +10,15 @@ import {
   type TeamShotRow,
 } from "@/lib/api";
 
-function defaultPlayer(match: Match): string {
+/** Showcase pass-map pick: ``query`` matches StatsBomb names; ``label`` is what we show. */
+function defaultPlayer(match: Match): { query: string; label: string } {
   const teams = `${match.home_team} ${match.away_team}`.toLowerCase();
-  if (teams.includes("argentina")) return "Messi";
-  if (teams.includes("croatia")) return "Modri";
-  if (teams.includes("liverpool")) return "Salah";
-  if (teams.includes("italy")) return "Verratti";
-  if (teams.includes("women's")) return "Bonmati";
-  return "Messi";
+  if (teams.includes("argentina")) return { query: "Messi", label: "Lionel Messi" };
+  if (teams.includes("croatia")) return { query: "Modri", label: "Luka Modrić" };
+  if (teams.includes("liverpool")) return { query: "Salah", label: "Mohamed Salah" };
+  if (teams.includes("italy")) return { query: "Verratti", label: "Marco Verratti" };
+  if (teams.includes("women's")) return { query: "Bonmati", label: "Aitana Bonmatí" };
+  return { query: "Messi", label: "Lionel Messi" };
 }
 
 function formatDate(iso: string | null): string {
@@ -81,7 +82,9 @@ export default function PitchBoard() {
     [matches, matchId],
   );
 
-  const player = selected ? defaultPlayer(selected) : "Messi";
+  const player = selected
+    ? defaultPlayer(selected)
+    : { query: "Messi", label: "Lionel Messi" };
   const homeStats = selected ? teamRow(teams, selected.home_team) : undefined;
   const awayStats = selected ? teamRow(teams, selected.away_team) : undefined;
 
@@ -145,7 +148,7 @@ export default function PitchBoard() {
     matchId == null
       ? null
       : kind === "passes"
-        ? `${chartUrl(matchId, kind, player)}&_=${matchId}-${kind}`
+        ? `${chartUrl(matchId, kind, player.query)}&_=${matchId}-${kind}`
         : `${chartUrl(matchId, kind)}?_=${matchId}-${kind}`;
 
   useEffect(() => {
@@ -154,7 +157,7 @@ export default function PitchBoard() {
 
   const chartHint =
     kind === "passes"
-      ? `Completed passes · ${player}`
+      ? `Completed passes · ${player.label}`
       : kind === "xg"
         ? "Size = xG · gold edge = goal · shootout excluded"
         : "Stars = goals · away team attacks left";
@@ -283,7 +286,7 @@ export default function PitchBoard() {
                   setImgLoading(false);
                   setError(
                     kind === "passes"
-                      ? `Pass map failed — “${player}” may not appear in this match.`
+                      ? `Pass map failed — “${player.label}” may not appear in this match.`
                       : "Could not render the pitch map from the API.",
                   );
                 }}
