@@ -16,8 +16,18 @@ from football_data.data import MatchInfo, load_events
 
 
 def _xy(location: Any) -> tuple[float | None, float | None]:
-    if isinstance(location, (list, tuple)) and len(location) >= 2:
-        return float(location[0]), float(location[1])
+    """Unpack StatsBomb ``[x, y]`` locations.
+
+    Fresh ``statsbombpy`` frames (and Parquet round-trips) often store
+    coordinates as ``numpy.ndarray``, not ``list``/``tuple`` — both must work.
+    """
+    if location is None:
+        return None, None
+    try:
+        if hasattr(location, "__len__") and len(location) >= 2:
+            return float(location[0]), float(location[1])
+    except (TypeError, ValueError):
+        return None, None
     return None, None
 
 

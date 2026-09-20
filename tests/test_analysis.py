@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import numpy as np
 import pytest
 
 from football_data.analysis import (
@@ -20,6 +21,26 @@ def test_shots_table_unpacks_coordinates_and_xg(sample_events):
     first_goal = shots.loc[shots["shot_outcome"] == "Goal"].iloc[0]
     assert (first_goal["x"], first_goal["y"]) == (110, 40)
     assert bool(first_goal["is_goal"]) is True
+
+
+def test_shots_table_unpacks_numpy_ndarray_locations(sample_events):
+    """statsbombpy / Parquet store locations as ndarray, not list."""
+    events = sample_events.copy()
+    events["location"] = events["location"].map(
+        lambda xy: np.asarray(xy) if xy is not None else xy
+    )
+    events["pass_end_location"] = events["pass_end_location"].map(
+        lambda xy: np.asarray(xy) if isinstance(xy, list) else xy
+    )
+
+    shots = shots_table(events, include_shootout=False)
+    assert len(shots) == 3
+    assert shots[["x", "y"]].notna().all().all()
+    assert (shots.iloc[0]["x"], shots.iloc[0]["y"]) == (110.0, 40.0)
+
+    completed = completed_passes_table(events, "Playmaker")
+    assert (completed.iloc[0]["x"], completed.iloc[0]["y"]) == (60.0, 40.0)
+    assert (completed.iloc[0]["end_x"], completed.iloc[0]["end_y"]) == (80.0, 42.0)
 
 
 def test_shots_table_excludes_shootout_by_default(sample_events):
